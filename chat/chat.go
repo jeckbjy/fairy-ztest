@@ -74,7 +74,7 @@ func StartClient() {
 	}))
 
 	// add timer for send message
-	timer.Start(timer.ModeLoop, 1000, func() {
+	timer.Start(1000, 0, func() {
 		log.Debug("Ontimeout")
 		req := &ChatMsg{}
 		req.Content = "hello word!"

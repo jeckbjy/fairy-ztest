@@ -31,15 +31,6 @@ func SendEchoToServer() {
 	}
 }
 
-func OnTimeout() {
-	log.Debug("timeout")
-	if gClient == nil {
-		return
-	}
-
-	SendEchoToServer()
-}
-
 func OnConnected(conn fairy.IConn) {
 	log.Debug("OnConnected")
 	gClient = conn
@@ -63,7 +54,14 @@ func StartClient(net_mode string, msg_mode string) {
 	tran.Connect("localhost:8888", 0)
 	tran.Start()
 
-	timer.Start(timer.ModeLoop, 500, OnTimeout)
+	timer.Start(500, 0, func() {
+		log.Debug("timeout")
+		if gClient == nil {
+			return
+		}
+
+		SendEchoToServer()
+	})
 	exit.Wait()
 	fmt.Printf("stop client!\n")
 }
